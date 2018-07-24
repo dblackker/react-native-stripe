@@ -30,7 +30,10 @@ class Manual extends PureComponent<Props> {
           <View style={styles.modal}>
             <CloseButton onPress={this.props.closeCardModal} />
             <CreditCardInput onChange={this.props.onCardEdit} />
-            <Button title="Add Card" onPress={this.props.addCard} />
+            <View style={styles.buttonContainer}>
+              <Button style={styles.button} title="Add Card (token)" onPress={this.props.addCardWithToken} />
+              <Button style={styles.button} title="Add Card (source)" onPress={this.props.addCardWithSource} />
+            </View>
           </View>
         </Modal>
       </View>
@@ -48,6 +51,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
+  buttonContainer: {
+    marginTop: 16,
+    flexDirection: "row",
+    justifyContent: "space-around"
+  },
+  button: {
+    padding: 16
+  }
 });
 
 export default compose(
@@ -56,9 +67,14 @@ export default compose(
   withProps(({ setIsCardModalOpened, creditCard }) => ({
     openCardModal: () => setIsCardModalOpened(true),
     closeCardModal: () => setIsCardModalOpened(false),
-    addCard: () => {
-      stripe.addCard(creditCard);
+    addCardWithToken: () => {
+      console.log('got here');
+      stripe.addCardWithToken(creditCard);
       setIsCardModalOpened(false);
     },
+    addCardWithSource: () => {
+      stripe.addCardWithSource(creditCard);
+      setIsCardModalOpened(false);
+    }
   }))
 )(Manual);
